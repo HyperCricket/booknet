@@ -1,4 +1,4 @@
-.PHONY: help run build dev down logs shell clean rebuild
+.PHONY: help run build dev down logs shell clean rebuild test docs
 
 help:
 	@echo ""
@@ -11,6 +11,8 @@ help:
 	@echo "  make shell    - Open shell in main container"
 	@echo "  make rebuild  - Full rebuild (no cache)"
 	@echo "  make clean    - Remove containers + volumes"
+	@echo "  make test     - Run all tests"
+	@echo "  make docs     - Build the documentation"
 	@echo ""
 
 run:
@@ -29,7 +31,7 @@ logs:
 	@docker compose logs -f
 
 shell:
-	@docker compose exec main bash
+	@docker compose run --rm main bash
 
 rebuild:
 	@docker compose down
@@ -37,3 +39,9 @@ rebuild:
 
 clean:
 	@docker compose down -v --remove-orphans
+
+test:
+	@docker compose run --rm main python3 -m pytest tests
+
+docs:
+	@docker compose run --rm main make -C docs html

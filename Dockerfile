@@ -9,9 +9,16 @@ COPY requirements.txt .
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update
+RUN apt-get install -y make \
+    texlive-latex-base texlive-latex-extra \
+    texlive-latex-recommended latexmk
+RUN rm -rf /var/lib/apt/lists/*
 
 # Copy project files
 COPY . .
+
+ENV PYTHONPATH="/booknet/src"
 
 # Run application
 CMD ["python", "src/main.py"]
