@@ -1,11 +1,4 @@
-"""
-File for preprocessing dataset into clean, ready to train data.
-Steps:
-    1. Load data into Pandas Dataframe
-    2. Filter sparse users/books
-    3. Build user-item matrix
-    4. Convert to sparse matrix
-"""
+"""Preprocess dataset into clean, ready-to-train data."""
 
 import pandas as pd
 from scipy.sparse import csr_matrix
@@ -16,20 +9,22 @@ MIN_AMT_BOOK_REVIEWS = 10
 
 
 def load(path: str = RATINGS_PATH) -> pd.DataFrame:
-    """Function to load ratings csv to a dataframe
+    """Load ratings csv to a dataframe.
 
     :param path: path to csv file
     :type path: string
     :return: Dataframe of the csv file
     :rtype: pd.DataFrame
-
     """
     ratings = pd.read_csv(RATINGS_PATH)
     return ratings
 
 
 def clean(ratings: pd.DataFrame) -> pd.DataFrame:
-    """Filter out any users that have given less than 5 reviews and books that have less than 10 reviews
+    """Filter out sparse users and books.
+
+    Filter out any users that have given less than 5 reviews and books that
+    have less than 10 reviews.
 
     :param ratings: Dataframe containing the ratings
     :type ratings: pd.DataFrame
@@ -48,7 +43,11 @@ def clean(ratings: pd.DataFrame) -> pd.DataFrame:
 
 
 def build_matrix(ratings: pd.DataFrame) -> pd.DataFrame:
-    """Create the pivot table where: rows are the users, cols are the books, and the indices are the ratings
+    """Create the pivot table.
+
+    rows = users
+    cols = books
+    indices = ratings
 
     :param ratings: Dataframe containing the ratings
     :type ratings: pd.DataFrame
@@ -61,7 +60,10 @@ def build_matrix(ratings: pd.DataFrame) -> pd.DataFrame:
 
 
 def to_sparse(matrix: pd.DataFrame) -> csr_matrix:
-    """Fill NaNs with 0 and convert to scipy sparse matrix to reduce memory consumption
+    """Convert Dataframe into csr_matrix.
+
+    Fill NaNs with 0 and convert to scipy sparse matrix to reduce memory
+    consumption.
 
     :param matrix: pivot table
     :type matrix: pd.DataFrame
@@ -73,7 +75,7 @@ def to_sparse(matrix: pd.DataFrame) -> csr_matrix:
 
 
 def preprocess(path: str = RATINGS_PATH) -> csr_matrix:
-    """Run full preprocessing pipeline in this method
+    """Run full preprocessing pipeline in this method.
 
     :param path: path to csv file
     :type path: string
