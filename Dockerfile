@@ -18,7 +18,4 @@ RUN rm -rf /var/lib/apt/lists/*
 # Copy project files
 COPY . .
 
-ENV PYTHONPATH="/booknet/src"
-
-# Run application
-CMD ["python", "src/main.py"]
+ENV PYTHONPATH="/booknet/src/"

@@ -4,4 +4,4 @@ services:
     volumes:
       - .:/booknet
     working_dir: /booknet
-    command: python3 src/main.py
+    command: python3 -m booknet.main.py
