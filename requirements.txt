@@ -4,6 +4,9 @@ dataclasses
 # Math/Plotting
 numpy
 matplotlib
+scipy
+pandas
+scikit-learn
 
 # ML
 torch
@@ -12,6 +15,7 @@ torch
 flake8
 black
 isort
+tqdm
 
 # static type checking
 mypy
