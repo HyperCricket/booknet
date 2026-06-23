@@ -8,16 +8,20 @@ class MatrixFactorization(nn.Module):
 
     def __init__(self, num_users: int, num_items: int, embedding_dim: int) -> None:
         super().__init__()
-
         self.user_embeddings = nn.Embedding(
             num_embeddings=num_users, embedding_dim=embedding_dim
         )
         self.item_embeddings = nn.Embedding(
             num_embeddings=num_items, embedding_dim=embedding_dim
         )
+        self.user_bias = nn.Embedding(num_users, 1)
+        self.item_bias = nn.Embedding(num_items, 1)
+        self.global_bias = nn.Parameter(torch.zeros(1))
 
         init.normal_(self.user_embeddings.weight, std=0.1)
         init.normal_(self.item_embeddings.weight, std=0.1)
+        nn.init_zeros_(self.user_bias.weight)
+        nn.init_zeros_(self.item_bias.weight)
 
     def forward(self, users: torch.Tensor, items: torch.Tensor) -> torch.Tensor:
         """Perform one dot product at a time, element wise."""
@@ -27,4 +31,9 @@ class MatrixFactorization(nn.Module):
 
         out = (user_embeddings * item_embeddings).sum(dim=1)
 
-        return out
+        return (
+            out
+            + self.user_bias(users).squeeze(1)
+            + self.item_bias(items).squeeze(1)
+            + self.global_bias
+        )
