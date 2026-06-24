@@ -1,10 +1,13 @@
 """Preprocess dataset into clean, ready-to-train data."""
 
+from pathlib import Path
 import pandas as pd
 from scipy.sparse import csr_matrix
 
 # RATINGS_PATH = "/home/kevin/Programming/booknet/data/raw/goodbooks/ratings.csv"
-RATINGS_PATH = "/home/fri/booknet/data/raw/goodbooks-10k/ratings.csv"
+# RATINGS_PATH = "/home/fri/booknet/data/raw/goodbooks-10k/ratings.csv"
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+RATINGS_PATH = REPO_ROOT / "data" / "raw" / "goodbooks-10k" / "ratings.csv"
 MIN_AMT_USER_REVIEWS = 5
 MIN_AMT_BOOK_REVIEWS = 10
 
