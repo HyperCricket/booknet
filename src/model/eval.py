@@ -100,10 +100,10 @@ def compute_ranking(model, train_by_user, test_by_user, num_items, k=K):
                 hits.append(0.0)
                 ndcgs.append(0.0)
 
-        hr = sum(hits) / len(hits)
-        ndcg = sum(ndcgs) / len(ndcgs)
-        coverage = len(recommended) / num_items
-        return hr, ndcg, coverage
+    hr = sum(hits) / len(hits)
+    ndcg = sum(ndcgs) / len(ndcgs)
+    coverage = len(recommended) / num_items
+    return hr, ndcg, coverage
 
 
 def main():
@@ -117,6 +117,7 @@ def main():
     model.eval()
     print(f"Loaded checkpoint: {CHECKPOINT}")
     rmse = compute_rmse(model, test_loader)
+    print(f"train RMSE (sanity check): {compute_rmse(model, train_loader):.4f}")
 
     train_by_user = collect_items_by_user(train_loader)
     test_by_user = collect_items_by_user(test_loader)

@@ -20,8 +20,8 @@ class MatrixFactorization(nn.Module):
 
         init.normal_(self.user_embeddings.weight, std=0.1)
         init.normal_(self.item_embeddings.weight, std=0.1)
-        nn.init_zeros_(self.user_bias.weight)
-        nn.init_zeros_(self.item_bias.weight)
+        nn.init.zeros_(self.user_bias.weight)
+        nn.init.zeros_(self.item_bias.weight)
 
     def forward(self, users: torch.Tensor, items: torch.Tensor) -> torch.Tensor:
         """Perform one dot product at a time, element wise."""

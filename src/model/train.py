@@ -11,11 +11,12 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
 train_loader, _, num_users, num_books = load_data()
+print(num_users, num_books)
 model = MatrixFactorization(num_users, num_books, embedding_dim=50).to(
     device
 )  # Embedding dim = hyperparameter, also move device to GPU if there is one
 loss_fn = nn.MSELoss()
-optimizer = optim.Adam(model.parameters())
+optimizer = optim.Adam(model.parameters(), weight_decay=1e-4)
 num_epochs = 10
 
 # Make sure models folder exists before we save checkpoints
