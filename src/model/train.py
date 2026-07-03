@@ -1,6 +1,5 @@
 import os
-
-# from model.mf_baseline import MatrixFactorization
+from model.mf_baseline import MatrixFactorization
 from model.ncf import NCF
 from data.dataset import load_data
 import torch
@@ -12,17 +11,27 @@ from tqdm import tqdm
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Using device: {device}")
 
+MODELS = {
+        "mf" : MatrixFactorization,
+        "ncf" : NCF
+    }
+MODEL_NAME = "ncf"
+ModelClass = MODELS[MODEL_NAME]
+CKPT_PATH = f"models/{MODEL_NAME}_best.pt"
+CKPT_LATEST = f"models/{MODEL_NAME}_latest.pt"
+
 train_loader, _, num_users, num_books = load_data()
-print(num_users, num_books)
-model = NCF(num_users, num_books, embedding_dim=50).to(
+model = ModelClass(num_users, num_books, embedding_dim=50).to(
     device
 )  # Embedding dim = hyperparameter, also move device to GPU if there is one
+print(model)
 loss_fn = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), weight_decay=1e-4)
+optimizer = optim.Adam(model.parameters(), weight_decay=1e-3)
 num_epochs = 10
 
 # Make sure models folder exists before we save checkpoints
 os.makedirs("models", exist_ok=True)
+
 
 """Training Loop
 
@@ -57,13 +66,13 @@ for epoch in range(num_epochs):
     avg_loss = total_loss / len(train_loader)
     print(f"Epoch {epoch + 1}: avg loss = {avg_loss:.4f}")
     # save pytorch checkpoint every epoch in this path
-    torch.save(model.state_dict(), "models/mf_latest.pt")
+    torch.save(model.state_dict(), CKPT_LATEST)
 
     if avg_loss < best_loss:
         best_loss = avg_loss
-        torch.save(model.state_dict(), "models/mf_baseline.pt")
-        print(f" new best (loss {best_loss:.4f}) saved to models/mf_baseline.pt")
+        torch.save(model.state_dict(), CKPT_PATH)
+        print(f" new best (loss {best_loss:.4f}) saved to {CKPT_PATH}")
 
     print(
-        f"Training complete. Best model saved at models/mf_baseline.pt (loss {best_loss:.4f})"
+        f"Training complete. Best model saved at {CKPT_PATH} (loss {best_loss:.4f})"
     )

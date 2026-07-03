@@ -1,6 +1,6 @@
 import torch
 import torch.nn as nn
-
+import torch.nn.init as init
 
 class NCF(nn.Module):
     def __init__(self, num_users: int, num_items: int, embedding_dim: int) -> None:
@@ -13,12 +13,16 @@ class NCF(nn.Module):
         self.relu = nn.ReLU()
         self.dropout = nn.Dropout(0.2)
 
+        init.normal_(self.user_embedding.weight, std = 0.1)
+        init.normal_(self.item_embedding.weight, std = 0.1)
+
+
     def forward(self, user, item):
         user_vec = self.user_embedding(user)
         item_vec = self.item_embedding(item)
         x = torch.cat([user_vec, item_vec], dim=-1)
         x = self.relu(self.fc1(x))
-        x = self.dropout(x)
+        # x = self.dropout(x)
         x = self.relu(self.fc2(x))
         x = self.fc3(x)
         return x.squeeze(-1)

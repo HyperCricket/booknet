@@ -18,17 +18,29 @@ from pathlib import Path
 from collections import defaultdict
 import torch
 from model.mf_baseline import MatrixFactorization
+from model.ncf import NCF
 from data.dataset import load_data
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
 def build_model(num_users, num_items):
-    return MatrixFactorization(num_users, num_items, embedding_dim=50)
+    return MODELS[MODEL_NAME](num_users, num_items, embedding_dim=50)
 
+MODELS = {
+        "mf": MatrixFactorization,
+        "ncf": NCF
+        }
 
-CHECKPOINT = REPO_ROOT / "models" / "mf_baseline.pt"
-RESULTS_FILE = REPO_ROOT / "results" / "mf_baseline.txt"
+CKPTS = {
+        "mf": "mf_baseline.pt",
+        "ncf": "ncf_best.pt"
+        }
+
+MODEL_NAME = "ncf"
+CKPT = CKPTS[MODEL_NAME]
+CHECKPOINT = REPO_ROOT / "models" / CKPT 
+RESULTS_FILE = REPO_ROOT / "results" / f"{MODEL_NAME}_baseline.txt"
 K = 10
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
