@@ -1,5 +1,7 @@
 import os
-from model.mf_baseline import MatrixFactorization
+
+# from model.mf_baseline import MatrixFactorization
+from model.ncf import NCF
 from data.dataset import load_data
 import torch
 import torch.nn as nn
@@ -12,7 +14,7 @@ print(f"Using device: {device}")
 
 train_loader, _, num_users, num_books = load_data()
 print(num_users, num_books)
-model = MatrixFactorization(num_users, num_books, embedding_dim=50).to(
+model = NCF(num_users, num_books, embedding_dim=50).to(
     device
 )  # Embedding dim = hyperparameter, also move device to GPU if there is one
 loss_fn = nn.MSELoss()
