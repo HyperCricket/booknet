@@ -26,7 +26,7 @@ model = ModelClass(num_users, num_books, embedding_dim=50).to(
 )  # Embedding dim = hyperparameter, also move device to GPU if there is one
 print(model)
 loss_fn = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.001)
+optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay = 1e-5)
 num_epochs = 10
 
 # Make sure models folder exists before we save checkpoints
