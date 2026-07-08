@@ -33,11 +33,11 @@ MODELS = {
         }
 
 CKPTS = {
-        "mf": "mf_baseline.pt",
+        "mf": "mf_best.pt",
         "ncf": "ncf_best.pt"
         }
 
-MODEL_NAME = "ncf"
+MODEL_NAME = "mf"
 CKPT = CKPTS[MODEL_NAME]
 CHECKPOINT = REPO_ROOT / "models" / CKPT 
 RESULTS_FILE = REPO_ROOT / "results" / f"{MODEL_NAME}_baseline.txt"

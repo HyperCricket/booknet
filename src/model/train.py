@@ -15,7 +15,7 @@ MODELS = {
         "mf" : MatrixFactorization,
         "ncf" : NCF
     }
-MODEL_NAME = "ncf"
+MODEL_NAME = "mf"
 ModelClass = MODELS[MODEL_NAME]
 CKPT_PATH = f"models/{MODEL_NAME}_best.pt"
 CKPT_LATEST = f"models/{MODEL_NAME}_latest.pt"
@@ -26,7 +26,7 @@ model = ModelClass(num_users, num_books, embedding_dim=50).to(
 )  # Embedding dim = hyperparameter, also move device to GPU if there is one
 print(model)
 loss_fn = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), weight_decay=1e-3)
+optimizer = optim.Adam(model.parameters(), lr=0.001)
 num_epochs = 10
 
 # Make sure models folder exists before we save checkpoints
